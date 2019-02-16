@@ -1,0 +1,10 @@
+order of a: 16383
+fieldpower: lookup tables generated.. 
+sample: 00000000000000000000000000000000
+inserted 0 errors and 15 erasures
+should be able to correct 1228 errors
+start RS decode.. 
+..end RS decode.. 
+decoding took 774 milliseconds
+outer code: 15 errasures, 0 errors corrected
+I did correct all errors!
