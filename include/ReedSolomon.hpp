@@ -158,7 +158,7 @@ vector<GFE>& RScode<GFE,Dft>::RS_systematic_encode(const vector<GFE>& infvec, ve
 // crec: recovered vector
 // retured is a pair, where pair.fist is the number of erasurs and pair.second the number of errors
 template<class GFE, class Dft>
-pair<unsigned,unsigned> RScode<GFE,Dft>::RScode<GFE,Dft>::RSdecode(vector<GFE>& crec, const vector<GFE>& c){
+std::pair<unsigned,unsigned> RScode<GFE,Dft>::RSdecode(vector<GFE>& crec, const vector<GFE>& c){
 	
 	pair<unsigned, unsigned> erctr;
 	

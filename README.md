@@ -11,13 +11,13 @@ The coding scheme relies on the following:
 - If the information that is written on the nucleotides behaves like a random sequence, then long homopolymers are very unlikely; specifically the probability that there is a run of length at least $k$ in a random DNA molecule of length $n$ can be upper bounded by $n (4/4^k) = n 4^{1-k}$. 
 
 
-We store the information on $M$ fragments of length $L$. We index the fragments, and protect the index with $R$ parity bits. We propose the following scheme:
+We store the information on M fragments of length L. We index the fragments, and protect the index with R parity bits. We propose the following scheme:
 
-- Map the information to $K$ fragments of length $L - \log(M)-R$. 
+- Map the information to K fragments of length L - log(M)-R. 
 
 - Multiply the information with a pseudorandom sequence. 
 
-- Split the information into $K$ blocks of length $L - \log(M)-R$, and add extra blocks by encoding each row separately by using a Reed-Solomon code over the extension field $2^m$. This results in $M-K$ extra molecules.
+- Split the information into numblocks blocks of length L - log(M)-R, and add extra blocks by encoding each row separately by using a Reed-Solomon code over the extension field 2^m. This results in M-K extra molecules.
 
 - Add a unique index in the middle of each fragment, along with parity bits protecting the index.
 
@@ -81,8 +81,8 @@ Installation
 The code is written in C++, and compillation requires installation of the boost libary. 
 
 
-Installation of required software on Linux (not tested)
--------------------------------------------------------
+Installation of required software on Linux
+------------------------------------------
 	sudo apt-get install gcc
 	sudo apt-get install make
 	sudo apt-get install libboost-all-dev

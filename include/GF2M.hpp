@@ -82,7 +82,7 @@ public:
 				if (b & 1) // if b is odd, add the corresponding a to p 
 					el ^= a;
 
-				if (a &  ( ((uint)1) << (m-1)) ) // GF modulo: if a >= 2^m, it overflows when shifted left, so reduce 
+				if (a &  ( ((uint)1) << ( (int) m - 1 )) ) // GF modulo: if a >= 2^m, it overflows when shifted left, so reduce 
 					a = (a << 1) ^ prim_poly; // XOR with the primitive polynomial
 				else
 					a <<= 1; // a*2 /* equivalent to a*2 
