@@ -6,13 +6,13 @@ This file gives instructions on encoding and decoding information on short DNA m
 Description of the scheme
 =========================
 
-We store the information on M fragments of length L. We index the fragments, and protect the index with $R$ parity bits. We propose the following scheme:
+We store the information on M fragments of length L. We index the fragments, and protect the index with R parity bits. We propose the following scheme:
 
-- Map the information to K fragments of length L - \log(M)-R. 
+- Map the information to K fragments of length L - log(M)-R. 
 
 - Multiply the information with a pseudorandom sequence. 
 
-- Split the information into K blocks of length L - \log(M)-R, and add extra blocks by encoding each row separately by using a Reed-Solomon code over the extension field 2^m. This results in M-K extra molecules.
+- Split the information into K blocks of length L - log(M)-R, and add extra blocks by encoding each row separately by using a Reed-Solomon code over the extension field 2^m. This results in M-K extra molecules.
 
 - Add a unique index in the middle of each fragment, along with parity bits protecting the index.
 
@@ -31,8 +31,26 @@ Here are the parameters of the code, below are some examples to see how the code
 - nuss: number of symbols of outer code per segment (default is nuss=12)
 
 Here are two constraints:
-- The index needs to be sufficiently long so that each sequence has a unique index, specificaly: l*6 < log_2( numblocks*n )
-- For the inner and outer code parameters to go together, must have: K*mi = nuss*mo + l*mi, where mi=6, mo=14
+- The index needs to be sufficiently long so that each sequence has a unique index, specificaly: l * 6 < log( numblocks * n ), where the logarithm has base 2.
+- For the inner and outer code parameters to go together, must have: K * mi = nuss * mo + l * mi, where mi=6, mo=14
+
+
+Here are a few concrete examples of the choices of the parameters that satisfy the constraints above.
+Let the length of the index be l = 4, then we can have at most 2^(mi * l) = 2^24 = 16777216 sequences. That means we can for example choose n = 16383 and store the data on up to 1024 < 2^24/16383. 
+Suppose we choose the redundancy of the inner code such that N-K = 3.
+Then the following are a subset of the choices that are possible:
+
+| K  | nuss|  N | length of sequence in nucleotides  |
+|:--:|:---:|:--:| :-----:|
+| 11  | 3   | 14 | 42 |
+| 18 | 6   | 21 | 63 |
+| 25 | 9   | 28 | 84 |
+| 32 | 12  | 35 | 105 |
+| 39 | 15  | 42 | 126|
+| 46 | 18  | 49 | 147|
+
+
+
 
 Example
 =======
@@ -91,3 +109,4 @@ Licence
 ==========
 
 All files are provided under the terms of the Apache License, Version 2.0, see the included file "apache_licence_20" for details.
+
