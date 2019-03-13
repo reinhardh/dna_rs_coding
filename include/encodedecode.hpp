@@ -122,6 +122,7 @@ void EnDecode<Innercode,Outercode>::encode(string& str, vector<string>& urn){
 			
 			for(GFO& gfo: c[nb])
 				gfo += GFO(randgfe(rng),0);
+				// gfo += GFO( rng() % (1<<GFO::m) ,0);
  		}
 
 		// add index, encode inner code
@@ -146,6 +147,7 @@ void EnDecode<Innercode,Outercode>::encode(string& str, vector<string>& urn){
 			uniform_int_distribution<uint> randgfe(0, 1<<GFI::m - 1 );
 			for(GFI& gfi: indexgfi)
 				gfi += GFI(randgfe(rng),0);
+				// gfi += GFI( rng() % (1<<GFI::m) ,0);
 
 			// construct information of inner codeword: [information | index | information]
 			//vector<GFI> infveci; 	
@@ -268,7 +270,8 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 			mt19937 rng( 5489U ) ; // constructed with seed 5489U
 			uniform_int_distribution<uint> randgfe(0, 1<<GFI::m - 1 );
 			for(GFI& gfi: indexgfi)
-				gfi -= GFI(randgfe(rng),0);
+				gfi -= GFI( randgfe(rng) ,0);
+				//gfi -= GFI( rng() % (1<<GFI::m)  ,0);
 
 			vector<GFUINT> index;
 			GFM2GFN<GFI,GFUINT>(indexgfi,index);
@@ -406,7 +409,9 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 			for(GFO& gfo: cw[nb])
 				if( ! gfo.isempty() )
 					gfo -= GFO(randgfe(rng),0);
+					//gfo -= GFO( rng() % (1<<GFO::m) ,0);
 				else // errasure
+					//rng(); 
 					randgfe(rng); // draw to increase state of rng
 		}
 
