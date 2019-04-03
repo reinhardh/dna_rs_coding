@@ -144,8 +144,8 @@ if ( l*mi < log( numblocks*n )/log( 2 ) ) {
 // tell the user the parameter choices
 
 cout << "--------------------------------" << endl;
-cout << "redundancy outer code: " << float(k)/float(n) << endl;
-cout << "redundancy inner code: " << float(K)/float(N) << endl;
+cout << "redundancy outer code: " << float(n-k)/float(k) << " (= (n-k)/k)" << endl;
+cout << "redundancy inner code: " << float(N-K)/float(K) << " (= (N-K)/K)" << endl;
 cout << "--------------------------------" << endl;
 
 

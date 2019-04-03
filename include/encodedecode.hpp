@@ -343,21 +343,23 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 
 
 	
-	cout << "read error prob: " << (float) errctr / (float) numfrag << endl;
+	//cout << "read error prob: " << (float) errctr / (float) numfrag << endl;
 	cout << "number of reads: " << numfrag << endl;
-	cout << "inner code: " << (float)erctric.first / (float) numfrag << " erasures on average corrected" << endl;
-	cout << "inner code: " << (float)erctric.second/ (float) numfrag << " errors on average corrected" << endl;
-	cout << "inner code, dec. errors: " << ic_decerr << endl;
+	//cout << "inner code: " << (float)erctric.first / (float) numfrag << " erasures on average corrected" << endl;
+	cout << "inner code: " << (float)erctric.second/ (float) numfrag << " errors on average corrected per sequence" << endl;
+	//cout << "inner code, dec. errors: " << ic_decerr << endl;
 
 	int ct = 0;
 	for(unsigned i=0;i<curerr.size();++i){
 		//cout << i << " " << curerr[i] << endl;
-		if( curerr[i] >= 1){
+		if( curerr[i] > (float)(innercode.n - innercode.k)/2.0 ){
+		//if( curerr[i] >= (innercode.n - innercode.k) ){
 			segm_ordered_map[i] = seqctrmap();
 			ct++;
+			segm_ordered[i] = vector<GFI>();
 		}
 	}
-	cout << "errasures: " << ct << endl;
+	// cout << "errasures: " << ct << endl;
 	
 	if(gtruthfile.size() > 0){
 		// error statistics based on groundtruth
@@ -415,12 +417,15 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 					randgfe(rng); // draw to increase state of rng
 		}
 
-		cout << "decoded block " << b << endl;
+		cout << "decoding block " << b << endl;
 		vector< vector<GFO> > infrec(nuss);
 		for(unsigned nb=0;nb<nuss;++nb){
 			//pair<unsigned,unsigned> erctroc = outercode.RS_decode_spec(infrec[nb],cw[nb]);
 			pair<unsigned,unsigned> erctroc = outercode.RS_shortened_decode(infrec[nb],cw[nb]);
-			cout << "\touter code: " << erctroc.first << " errasures, " << erctroc.second << " errors corrected"<< endl;
+			cout << "\tpart " << nb << "/" << nuss << endl;
+			if(nb == nuss-1){
+				cout << "\touter code: " << erctroc.first << " errasures, " << erctroc.second << " errors corrected"<< endl;
+			}
 		}
 		
 		// add information to string
