@@ -1,4 +1,7 @@
 
+
+
+>
 Summary
 =======
 
@@ -7,7 +10,7 @@ This file gives instructions on encoding and decoding information on short DNA m
 Description of the scheme
 =========================
 
-We store the information on M sequences of length L. The sequences are indexed and proteced with error correcting codes. The scheme performs the following steps:
+We store the information on M sequences of length L. The sequences are indexed and protected with error correcting codes. The scheme performs the following steps:
 
 - Multiply the information with a pseudorandom sequence. 
 
@@ -32,7 +35,7 @@ Here are the parameters of the code, and below are some examples to see how the 
 - nuss: number of symbols of outer code per segment (default is nuss=12)
 
 Here are two constraints:
-- The index needs to be sufficiently long so that each sequence has a unique index, specificaly: l * 6 > log( numblocks * n ), where the logarithm has base 2.
+- The index needs to be sufficiently long so that each sequence has a unique index, specifically: l * 6 > log( numblocks * n ), where the logarithm has base 2.
 - For the inner and outer code parameters to go together, must have: K * mi = nuss * mo + l * mi, where mi=6, mo=14.
 
 The number of bits per nucleotide is:
@@ -71,7 +74,7 @@ The program texttodna can be used to encode data, map it to DNA segments, and to
 Example 1
 ---------
 
-In our first example, we encode information on one block of length n=12472 and we choose k=9000, which meand the outer code can correct nse substitution errors and ner erasures provided that 2*nse + ner <= 12472-9000. The rest of the parameters are the default parameters, i.e.,  N=34, K=32, nuss=12. This results in sequences of length N*ni/2 = 43*6/2 = 102.
+In our first example, we encode information on one block of length n=12472 and we choose k=9000, which means the outer code can correct nse substitution errors and ner erasures provided that 2*nse + ner <= 12472-9000. The rest of the parameters are the default parameters, i.e.,  N=34, K=32, nuss=12. This results in sequences of length N*ni/2 = 43*6/2 = 102.
  
 
 1. The following command takes the text in the file *data.zip*, encodes it on DNA segments, and stores the segments in *data_encoded.txt*:
@@ -103,7 +106,7 @@ In our second example, we encode information on two blocks of maximum length n=1
 Installation
 ============
 
-The code is written in C++, and compillation requires installation of the boost libary. 
+The code is written in C++, and compilation requires installation of the boost library. 
 
 
 Installation of required software on Linux
@@ -112,6 +115,12 @@ Installation of required software on Linux
 	sudo apt-get install make
 	sudo apt-get install libboost-all-dev
 
+Installation of required software on macOS
+------------------------------------------
+	/usr/bin/ruby –e “$curl –fsSL [https://raw.githubusercontent.com/Homebrew/install/master/install](https://raw.githubusercontent.com/Homebrew/install/master/install))”
+	brew install boost
+	sudo make –f Makefile
+	
 Licence
 ==========
 
