@@ -28,9 +28,11 @@ int main(int ac, char* av[])
 
 
 // command line options
-
+int primer_length = 0;
 int numblocks = 1;
+bool rev = false;
 string infile;
+string fastq_infile;
 string outfile;
 string gtruthfile;
 
@@ -53,8 +55,11 @@ desc.add_options()
     ("decode", "decode")
     ("disturb", "draw uniformly at random from the input lines, add errors to each line")
 	("input",po::value<string>(&infile)->default_value(""),"inputfile")	
+	("fastq_infile",po::value<string>(&fastq_infile)->default_value(""),"fastq inputfile")	
 	("output",po::value<string>(&outfile)->default_value(""),"outputfile")	
 	("groundtruth",po::value<string>(&gtruthfile)->default_value(""),"groundtruthfile")	
+	("reverse", po::bool_switch(&rev), "Fastq reverse sequences")
+	("primer_length",po::value<int>(&primer_length)->default_value(0),"primer_length")	
 	
 	("numblocks",po::value<int>(&numblocks)->default_value(1),"numblocks")	
 	("n",po::value<unsigned>(&n)->default_value(16383),"n")	
@@ -62,7 +67,7 @@ desc.add_options()
 	("N",po::value<unsigned>(&N)->default_value(34),"N")	
 	("K",po::value<unsigned>(&K)->default_value(32),"K")	
 	("l",po::value<unsigned>(&l)->default_value(4),"l")	
-	("nuss",po::value<unsigned>(&nuss)->default_value(12),"nuss")	
+	("nuss",po::value<unsigned>(&nuss)->default_value(12),"nuss")
 ;
 
 po::variables_map vm;
@@ -158,8 +163,7 @@ EnDecode< Innercode , Outercode > endecode(innercode,outercode,l,nuss);
 if (vm.count("encode")) {
 	
 	cout << "start encoding.." << endl;
-
-	if(infile == "" || outfile ==""){
+	if( infile == "" || outfile ==""){
 		cout << "in/outfile not specified " << endl; 
 		return 0;
 	}
@@ -196,25 +200,70 @@ if (vm.count("encode")) {
 /////////////////////// decode 
 if (vm.count("decode")) {
 	
-	if(infile == "" || outfile =="" || numblocks==0 ) {
+	if( (infile == "" && fastq_infile == "") || outfile =="" || numblocks==0 ) {
 		cout << "in/outfile/numblocks not specified " << endl; 
 		return 0;
 	}
-	cout << "infile:  " << infile << endl;
+	if(fastq_infile != ""){
+		cout << "fastq infile:  " << fastq_infile << endl;
+	} else {
+		cout << "infile:  " << infile << endl;
+	}
 	cout << "outfile: " << outfile << endl;
 	cout << "numblocks: "<<numblocks << endl; 
 
 	vector<string> drawnseg;
 
 	
-	string sLine = "";
-	ifstream in;
-	in.open(infile.c_str());
-	while (!in.eof()){
-		getline(in, sLine);
-		drawnseg.push_back(sLine);
+	if(infile != ""){
+		cout << "assume text file as input format" << endl;
+
+		string sLine = "";
+		ifstream in;
+		in.open(infile.c_str());
+		while (!in.eof()){
+			getline(in, sLine);
+			drawnseg.push_back(sLine);
+		}
+		drawnseg.resize(drawnseg.size()-1); // erase the last, empty line
+	} else {
+		cout << "assume fastq file as input format" << endl;
+
+		int seq_length = N*mi/2;
+		ifstream in;
+		in.open(fastq_infile.c_str());
+		if(in.fail())
+        	cerr << "Error when opening infile" << endl;
+		
+		string sLine = "";
+		vector<int> hist(400,0);
+		unsigned totalctr = 0;
+
+		int ctr = 0;
+		while (!in.eof()){
+			getline(in, sLine);
+			ctr++;
+			if(ctr % 4 == 2){
+				hist[sLine.size()]++;
+				totalctr++;
+				if(rev){
+					flipvecdir(sLine);
+					fliplett(sLine);
+				}
+
+				if(sLine.size() >= seq_length + primer_length){
+					sLine = sLine.substr(primer_length, seq_length + primer_length );
+					drawnseg.push_back(sLine);
+				}
+			}
+			//if(ctr == 100000000) break;
+		}
+		in.close();
 	}
-	drawnseg.resize(drawnseg.size()-1); // erase the last, empty line
+	
+	//
+
+
 
 	string recstr;
 	cout << "start decode.." << endl;	

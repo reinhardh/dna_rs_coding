@@ -195,10 +195,9 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 
 
    	////
-	// read grouundtruth if available for making tests
+	// read groundtruth if available for making tests
 	if(gtruthfile.size() > 0){
 		vector<string> drawnseg_gtruth;
-		string infile = "../../dna_coding_messy/File1_ODNA.txt";
 		string sLine = "";
 		ifstream in;
 		in.open(gtruthfile.c_str());
@@ -219,7 +218,7 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 			vector<GFI> irec(innercode.k); // recovered information from inner codeword
 			erctrictmp = innercode.RS_shortened_decode(irec,rececw);
 
-		 	groundtruth.push_back(irec);
+		 	groundtruth.push_back(irec); // assume the groundtruth is in the right order according to the index
 		}
 		cout << "Read groundtruth for evaluation, " << drawnseg_gtruth.size() << " sequences" << endl;
 	}
@@ -283,6 +282,8 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 				// if the index is not in the appropriate range, there must be an error
 				errctr ++;
 			} else { // index can be right
+				//curerr[ind] = 0;
+				//////
 				if(erctrictmp.second < curerr[ind]){ 
 					// found information with smaller error than previously seen, thus discard map
 					curerr[ind] = erctrictmp.second;
@@ -296,7 +297,20 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 						segm_ordered_map[ind].insert(make_pair(irec,1));
 					}	
 				} // else: (erctrictmp.second > curerr[ind]), nothing to do
-			
+				//////
+
+				// Just decide by frequency:
+				/*
+				if(erctrictmp.second <= innercode.n - innercode.k){ // make sure that not really off..
+					typename seqctrmap::iterator cur = segm_ordered_map[ind].find(irec);
+					if(cur != segm_ordered_map[ind].end()){ // segment already appeared  
+						cur->second++;  
+					} else {
+						segm_ordered_map[ind].insert(make_pair(irec,1));
+					}
+				}
+				*/
+
 				// if groundtruth given, compare to groundtruth whether there is a decoding error
 				/*
 				if(! groundtruth.empty() ){ 
@@ -335,8 +349,14 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 	// store it in segm_ordered
 	vector< vector<GFI> > segm_ordered(numblocks*outercode.n, vector<GFI>());
 	for(unsigned ind=0;ind<segm_ordered_map.size();++ind){
+		//cout << endl;
+		//for (auto const& x : segm_ordered_map[ind]){
+       	//	cout << x.second << endl; 
+		//}
+		
 		if(! segm_ordered_map[ind].empty() ){
 			typename seqctrmap::iterator max = max_element(segm_ordered_map[ind].begin(), segm_ordered_map[ind].end(), pairCompare<typename seqctrmap::value_type> );
+		//	cout << "best: " << max->second << endl;
 			segm_ordered[ind] = max->first;
 		}
 	}
@@ -352,7 +372,8 @@ void EnDecode<Innercode,Outercode>::decode(string& str, const vector<string>& dr
 	int ct = 0;
 	for(unsigned i=0;i<curerr.size();++i){
 		//cout << i << " " << curerr[i] << endl;
-		if( curerr[i] > (float)(innercode.n - innercode.k)/2.0 ){
+		if( curerr[i] >= (float)(innercode.n - innercode.k)/2.0 ){ // then better view as errasure
+		//if( curerr[i] >= 1 ){
 		//if( curerr[i] >= (innercode.n - innercode.k) ){
 			segm_ordered_map[i] = seqctrmap();
 			ct++;
@@ -491,9 +512,9 @@ void EnDecode<Innercode,Outercode>::outercode_stats(const vector< vector<typenam
 	}
 
 	cout << "num block errors: " << total_blockerror_ctr << endl;
-	cout << "OC: symbol err. prob.: " << (float) total_error_ctr / (float) (outercode.n*numblocks) << endl;
-	cout << "OC: symbol era. prob.: " << (float) total_erasure_ctr / (float) (outercode.n*numblocks) << endl;
+	cout << "OC: symbol error   prob.: " << (float) total_error_ctr / (float) (outercode.n*numblocks) << endl;
+	cout << "OC: symbol erasure prob.: " << (float) total_erasure_ctr / (float) (outercode.n*numblocks) << endl;
 
-	cout << "OC: symbol err. prob.: " << total_error_ctr  << endl;
-	cout << "OC: symbol era. prob.: " << total_erasure_ctr << endl;
+	cout << "OC: symbol error   prob.: " << total_error_ctr  << endl;
+	cout << "OC: symbol erasure prob.: " << total_erasure_ctr << endl;
 }

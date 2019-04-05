@@ -102,6 +102,15 @@ In our second example, we encode information on two blocks of maximum length n=1
 
 	`./texttodna --k=12000 --nuss=9 --K=25 --N=28  --decode --numblocks=3 --input=../data/paper_encoded.txt --output=../data/paper_recovered.pdf`
 
+Example 3
+---------
+
+The input can be a fastq file. In that case provide a fastq file as input as follows:
+1. Decoding:
+
+	`./texttodna --k=12000 --nuss=9 --K=25 --N=28  --decode --numblocks=3 --fastq_infile=../data/reads.fastq --primer_length=0 --output=../data/paper_recovered.pdf`
+
+Here, primer_length specifies how long the primer is and does not consider that part of the sequence. Use the flag --reverse if the reads are in reverse complement form.
 
 Installation
 ============

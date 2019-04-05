@@ -320,4 +320,20 @@ public:
 	}
 };
 
+void fliplett(string& frag){
+    for(unsigned i=0;i<frag.size();++i){
+        switch(frag[i]){
+            case 'T': frag[i] = 'A';
+                break;
+            case 'A': frag[i] = 'T';
+                break;
+            case 'G': frag[i] = 'C';
+                break;
+            case 'C': frag[i] = 'G';
+                break;
+        }
+    }
+}
+
+
 #endif
