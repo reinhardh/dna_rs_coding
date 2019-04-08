@@ -59,8 +59,8 @@ Then the following are a subset of the choices that are possible due to the cons
 | 46 | 18  | 49 | 147|
 
 
-Example
-=======
+Demo
+====
 
 In the following, we describe a few examples of how information can be encoded to DNA segments, and decode it back in order to recover the information. For all examples, the first step is to compile the program texttodna. Towards this goal, change to the folder ./simulate and execute the following command which compiles the code:
 
@@ -85,6 +85,8 @@ In our first example, we encode information on one block of length n=12472 and w
 3. The following command decodes the perturbed data in *data_drawnseg.txt*, and writes the result to *data_rec.zip*; this should recover the original text:
 
 	`./texttodna --decode --n=12472 --k=9000 --numblocks=1 --input=../data/data_drawnseg.txt --output=../data/data_rec.zip`
+
+This example runs on a standard laptop (2017 MacBook Pro) in 1-5 minutes.
 
 Example 2
 ---------
@@ -112,7 +114,10 @@ Use the flag --reverse if the reads are in reverse complement form.
 Installation
 ============
 
-The code is written in C++, and compilation requires installation of the boost library. 
+The code is written in C++, and compilation requires installation of the boost library. The package has been tested on the following operating systems:
+	Ubuntu 16.04
+	Mac OS Mojave 10.14
+The installation (compile time) is less than 2 minutes. 
 
 
 Installation of required software on Linux
