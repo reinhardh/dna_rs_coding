@@ -1,7 +1,3 @@
-
-
-
->
 Summary
 =======
 
@@ -20,6 +16,8 @@ We store the information on M sequences of length L. The sequences are indexed a
 
 - Add a unique index to each sequence, and inner code each sequence.
 
+- For the inner code we decide on a symbol size mi of 6 bit, for the outer code the symbol size mo is 14 bit. These values reflect considerations on accessible DNA sequence lengths and optimal code length.
+
 We are not avoiding homopolymers. Due to the randomization of the data, long homopolymers and corresponding errors are very unlikely, and the error-correcting code will deal with those. 
 
 Parameters of the code
@@ -27,10 +25,11 @@ Parameters of the code
 
 Here are the parameters of the code, and below are some examples to see how the code can be used to store information on DNA:
 
+
 - l: length of the index in muliples of 6 bits (default choice is l=4)
-- n: length of a block of the outer code (default is n=16383, n must be less or equal than 16383)
+- n: length of a block of the outer code (default is n=16383, n must be less or equal than 16383 (max outer code length equals 2^mo-1))
 - k: number of information symbols of the outer code (default is k=10977, must obey k<=n)
-- N: length of inner codeword (default is N=34)
+- N: length of inner codeword (default is N=34; max inner code length is 2^mi-1)
 - K: length of inner codeword symbols (default is K=32)
 - nuss: number of symbols of outer code per segment (default is nuss=12)
 
@@ -48,7 +47,7 @@ The redundancy of the inner code is N-K which means that a sequence can have (N-
 Here are a few concrete examples of the choices of the parameters that satisfy the constraints above.
 Let the length of the index be l = 4, then we can have at most 2^(mi * l) = 2^24 = 16777216 sequences. That means we can for example choose n = 16383 and store the data on up to 1024 = floor(2^24/16383) many blocks, each consisting of n=16383 sequences. 
 Suppose we choose the redundancy of the inner code such that N-K = 3.
-Then the following are a subset of the choices that are possible:
+Then the following are a subset of the choices that are possible due to the constraints given above:
 
 | K  | nuss|  N | length of sequence in nucleotides  |
 |:--:|:---:|:--:| :-----:|
@@ -58,8 +57,6 @@ Then the following are a subset of the choices that are possible:
 | 32 | 12  | 35 | 105 |
 | 39 | 15  | 42 | 126|
 | 46 | 18  | 49 | 147|
-
-
 
 
 Example
@@ -108,9 +105,9 @@ Example 3
 The input can be a fastq file. In that case provide a fastq file as input as follows:
 1. Decoding:
 
-	`./texttodna --k=12000 --nuss=9 --K=25 --N=28  --decode --numblocks=3 --fastq_infile=../data/reads.fastq --primer_length=0 --output=../data/paper_recovered.pdf`
+	`./texttodna --k=12000 --decode --numblocks=1 --fastq_infile=../data/reads.fastq  --output=../data/paper_recovered.pdf`
 
-Here, primer_length specifies how long the primer is and does not consider that part of the sequence. Use the flag --reverse if the reads are in reverse complement form.
+Use the flag --reverse if the reads are in reverse complement form.
 
 Installation
 ============
