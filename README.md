@@ -128,7 +128,7 @@ Installation of required software on Linux
 
 Installation of required software on macOS
 ------------------------------------------
-	/usr/bin/ruby –e “$curl –fsSL [https://raw.githubusercontent.com/Homebrew/install/master/install](https://raw.githubusercontent.com/Homebrew/install/master/install))”
+	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	brew install boost
 	sudo make –f Makefile
 	
