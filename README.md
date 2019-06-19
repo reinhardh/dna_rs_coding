@@ -115,22 +115,71 @@ Installation
 ============
 
 The code is written in C++, and compilation requires installation of the boost library. The package has been tested on the following operating systems:
-	Ubuntu 16.04
-	Mac OS Mojave 10.14
-The installation (compile time) is less than 2 minutes. 
+
+	- Ubuntu 16.04
+	- Mac OS Mojave 10.14
+    
+The installation (compile time) is less than 2 minutes. The easiest way to run the code for Windows and Mac users is to install and run the code in a Docker container. 
+
+
+Running the code in a Docker container - recommendened for Windows and Mac Users
+--------------------------------------------------------------------------------
+1. Install Docker desktop
+2. Start an Ubuntu virtual machine, by runing the following commands in a terminal:
+	
+    For OSX:
+	
+	`docker run -it -v ~/Documents:/data ubuntu:16.04 bash`
+	
+    For Windows:
+
+	`docker run -it -v c:/Users:/data ubuntu:16.04 bash`
+
+3. Install the required software in the Docker container:
+
+        apt-get update
+        apt-get install gcc
+        apt-get install make
+        apt-get install git
+        apt-get install libboost-all-dev
+
+4. Download the code:
+
+	`git clone https://github.com/reinhardh/dna_rs_coding/`
+
+5. Compile the code:
+
+        cd dna_rs_coding
+        cd simulate
+        make texttodna
+
+Now the examples above can be run.
+
+To work with your own data in the docker image:
+
+    - copy files to an apropriate folder (e.g., cp data.zip /dna_rs_coding/data)
+    - move to the folder /dna_rs_coding/simulate (e.g., by executing the command cd /dna_rs_coding/simulate) and run the code as in the examples to encode and decode files
+    - copy results back from virtual machine to local folder on computer (e.g., with command: cp data_encoded.txt c:/Users/robert/)
+    
+Please note that once the virtual machine is ended (by command exit), all data generated within the machine is deleted, and only the data copied to local folders remains.
 
 
 Installation of required software on Linux
 ------------------------------------------
-	sudo apt-get install gcc
-	sudo apt-get install make
-	sudo apt-get install libboost-all-dev
+    sudo apt-get install gcc
+    sudo apt-get install make
+    sudo apt-get install git
+    sudo apt-get install libboost-all-dev
+    
+Follow steps 4-5 above to run and compile the code.
 
 Installation of required software on macOS
 ------------------------------------------
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	brew install boost
 	sudo make –f Makefile
+
+Follow steps 4-5 above to run and compile the code.
 	
 Licence
 ==========
