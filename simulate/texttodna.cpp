@@ -282,7 +282,7 @@ if (vm.count("disturb")) {
 
 	// take M random draws uniformly at random and disturb those
 
-	const unsigned M = n*numblocks*6;
+	const unsigned M = n*numblocks*20;
 	const float substprob = 0.0001; // substitution error probability
 	cout << "disturb:" << endl;
 	cout << "\tDraw " << M << " many times" << endl;
