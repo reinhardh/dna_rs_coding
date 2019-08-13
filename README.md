@@ -26,7 +26,7 @@ Parameters of the code
 Here are the parameters of the code, and below are some examples to see how the code can be used to store information on DNA:
 
 
-- l: length of the index in muliples of 6 bits (default choice is l=4)
+- l: length of the index in multiples of 6 bits (default choice is l=4)
 - n: length of a block of the outer code (default is n=16383, n must be less or equal than 16383 (max outer code length equals 2^mo-1))
 - k: number of information symbols of the outer code (default is k=10977, must obey k<=n)
 - N: length of inner codeword (default is N=34; max inner code length is 2^mi-1)
@@ -181,7 +181,7 @@ Installation of required software on macOS
 
 Follow steps 4-5 above to run and compile the code.
 	
-Licence
+License
 ==========
 
 All files are provided under the terms of the Apache License, Version 2.0, see the included file "apache_licence_20" for details.
