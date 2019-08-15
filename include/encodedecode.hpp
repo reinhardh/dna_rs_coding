@@ -108,66 +108,66 @@ void EnDecode<Innercode,Outercode>::encode(string& str, vector<string>& urn){
 	mt19937 rng( 5489U ) ; // constructed with seed 5489U
 	uniform_int_distribution<uint> randgfe(0, 1<<GFO::m - 1 );
 	
+
     for(unsigned b=0;b<numblocks;++b){ // run over blocks 
 		cout << "encode block " << b << endl;	
 		// encode outer codes, add pseudorandom numbers	
 		vector< vector<GFO> > c(nuss); // outer codeword for given block
-    	for(unsigned nb=0;nb<nuss;++nb){ 
+    	for(unsigned nb=0;nb<nuss;nb++){
+		cout << "\t encode part  " << nb << endl; 
 			// outer information vector
         	vector<GFO> infvec( datao.begin()+(b*nuss+nb)*outercode.k ,
 		                   		datao.begin()+(b*nuss+nb+1)*outercode.k );
 			// encode the information, obtain outer codeword
+			//cout << infvec << endl;
 			outercode.RS_shortened_encode(infvec,c[nb]); 
 			// add pseudorandom element to each element of the codeword
-			
 			for(GFO& gfo: c[nb])
 				gfo += GFO(randgfe(rng),0);
 				// gfo += GFO( rng() % (1<<GFO::m) ,0);
- 		}
+		}
 
-		// add index, encode inner code
+	// add index, encode inner code
         for(unsigned i=0;i<outercode.n;++i){ // run over elements in a block 
-			
-			vector<GFO> infmol(nuss);
-            for(unsigned nb=0;nb<nuss;++nb){
-				infmol[nb] = c[nb][i];
-			}
-			
-			// tranform from GFO to GFI
-			vector<GFI> infmolin;
-			GFM2GFN<GFO,GFI>(infmol,infmolin);
-			//cout << "infmolin: " << infmol << endl;
-            // compute index
-			vector<GFUINT> index(1, GFUINT( i+outercode.n*b ,0) );
-			vector<GFI> indexgfi;
-			GFM2GFN<GFUINT,GFI>(index,indexgfi);
+		vector<GFO> infmol(nuss);
+            	for(unsigned nb=0;nb<nuss;++nb){
+			infmol[nb] = c[nb][i];
+		}
+		// tranform from GFO to GFI
+		vector<GFI> infmolin;
 		
-			// add pseudorandom sequence to index 
-			mt19937 rng( 5489U ) ; // constructed with seed 5489U
-			uniform_int_distribution<uint> randgfe(0, 1<<GFI::m - 1 );
-			for(GFI& gfi: indexgfi)
-				gfi += GFI(randgfe(rng),0);
-				// gfi += GFI( rng() % (1<<GFI::m) ,0);
+		GFM2GFN<GFO,GFI>(infmol,infmolin);
+		//cout << "infmolin: " << infmol << endl;
+    // compute index
+		vector<GFUINT> index(1, GFUINT( i+outercode.n*b ,0) );
+		vector<GFI> indexgfi;
+		GFM2GFN<GFUINT,GFI>(index,indexgfi);
+		// add pseudorandom sequence to index 
+		mt19937 rng( 5489U ) ; // constructed with seed 5489U
+		uniform_int_distribution<uint> randgfe(0, 1<<GFI::m - 1 );
+		for(GFI& gfi: indexgfi)
+			gfi += GFI(randgfe(rng),0);
+			// gfi += GFI( rng() % (1<<GFI::m) ,0);
 
-			// construct information of inner codeword: [information | index | information]
-			//vector<GFI> infveci; 	
-			//infveci.insert(infveci.end(), infmolin.begin(), infmolin.begin() + infmolin.size()/2);
-			//infveci.insert(infveci.end(), indexgfi.begin(), indexgfi.end());
-			//infveci.insert(infveci.end(), infmolin.begin() + infmolin.size()/2, infmolin.end());
-			
-			// construct information of inner codeword: [information | index ]
-			vector<GFI> infveci;
+		// construct information of inner codeword: [information | index | information]
+		//vector<GFI> infveci; 	
+		//infveci.insert(infveci.end(), infmolin.begin(), infmolin.begin() + infmolin.size()/2);
+		//infveci.insert(infveci.end(), indexgfi.begin(), indexgfi.end());
+		//infveci.insert(infveci.end(), infmolin.begin() + infmolin.size()/2, infmolin.end());
+		
+		// construct information of inner codeword: [information | index ]
+		vector<GFI> infveci;
 
-			// index first
-			infveci.insert(infveci.end(), indexgfi.begin(), indexgfi.end());
-			infveci.insert(infveci.end(), infmolin.begin(), infmolin.end());
+		// index first
+		infveci.insert(infveci.end(), indexgfi.begin(), indexgfi.end());
+		infveci.insert(infveci.end(), infmolin.begin(), infmolin.end());
 
-			assert(infveci.size() == innercode.k);
-            // encode the inner code, write it to urn[i] 
-            vector<GFI> icw;  
-			innercode.RS_shortened_encode(infveci,icw);
-			dnamap.cw2frag(icw,urn[i+outercode.n*b]);
-			flipvecdir(urn[i+outercode.n*b]);
+		assert(infveci.size() == innercode.k);
+    // encode the inner code, write it to urn[i] 
+    vector<GFI> icw;
+		innercode.RS_shortened_encode(infveci,icw);
+		dnamap.cw2frag(icw,urn[i+outercode.n*b]);
+		flipvecdir(urn[i+outercode.n*b]);
         }
 		cout << "encoded block " << b << " of " << numblocks << endl;
     } 	
