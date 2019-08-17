@@ -82,12 +82,12 @@ if (vm.count("help")) {
 
 ///// parameters
 
-typedef unsigned uint;
+typedef unsigned long long int uint;
 // inner code 
-const unsigned mi = 6;
-const unsigned prim_poly = 91;
+const uint mi = 6;
+const uint prim_poly = 91;
 typedef GF2M<uint,mi,prim_poly> GFI; // GF(2^6) with primitive polynomail 91
-const unsigned N_u = 63; // the underlying length of the shortened inner code
+const uint N_u = 63; // the underlying length of the shortened inner code
 
 
 GFI fai = GFI(2,0); // 64 + 2 = 1000010 = x + x^5
@@ -101,7 +101,7 @@ const unsigned P = 129;
 const unsigned n_u = P*Q; // 2^14 - 1
 
 
-const unsigned prim_poly_o = 16553;
+const uint prim_poly_o = 16553;
 const unsigned mo = 14;
 typedef GF2M<uint,mo,prim_poly_o> GFO;
 
