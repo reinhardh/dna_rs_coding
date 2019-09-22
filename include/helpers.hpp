@@ -80,7 +80,9 @@ vector<base_t> tobase(uint64_t nu, uint64_t base, unsigned size){
 template<class base_t>
 uint64_t frombase(const vector<base_t>& nn,uint64_t base){
 	unsigned deg = degree(base);
+	
 	assert(deg*nn.size() < 64); // otherwise we have an overflow below
+	
 	uint64_t nu = 0;
 	uint64_t basepow = 1;
 	for(unsigned i=0;i<nn.size();++i){

@@ -41,8 +41,9 @@ class EnDecode {
 	//const unsigned len = 4;
 	//const uint nbitsindex = 24;
 	//const uint nbitsindex = 24;
-	typedef GF2M<uint,24,0> GFUINT; // l*GFI::m = number bits of index
-	typedef GF2M<uint,42,0> GFINT; // 56/14 = 4
+	typedef GF2M<uint, 4*GFI::m ,0> GFUINT; // l*GFI::m = number bits of index
+	typedef GF2M<uint, 4*GFO::m ,0> GFINT; // 48/12 = 4
+	//typedef GF2M<uint,42,0> GFINT; // 56/14 = 4, 42/14 = 3
 
 	unsigned m;
 	unsigned nuss; // number of symbols of outer code per molecule
@@ -90,6 +91,7 @@ void EnDecode<Innercode,Outercode>::encode(string& str, vector<string>& urn){
 	assert(GFO::m >= 10); // then the filesize can be 2^(3*10)
 	vector<GFO> filesize(3,GFO(0,0)); // length is 3
 	vector<GFINT> filesizeint(1,GFINT( str.size() ,0));
+	
 	GFM2GFN<GFINT,GFO>( filesizeint ,filesize);
 	filesize.resize(3); // make sure length is 3
 	cout << "Filesize in Byte: " << str.size() << endl;
