@@ -105,7 +105,7 @@ const unsigned n_u = P*Q; // 16383 = 2^14 - 1, Q is prime and P = 3*43
 const uint prim_poly_o = 16553; // primitive polynomial for 2^14
 const unsigned mo = 14;
 typedef GF2M<uint,mo,prim_poly_o> GFO;
-GFO fao = GFO(66,0); // 66 = 64 + 2 = 1000010 = x + x^5 // Element of order ?
+GFO fao = GFO(66,0); // 66 = 64 + 2 = 1000010 = x + x^5 // Element of order 16383
 //*/
 
 
@@ -117,7 +117,8 @@ unsigned n_u = 4095; // 2^12 - 1; // 2^12-1 = 5*3*3*7*13
 const unsigned mo = 12;
 const uint prim_poly_o = 4621; // primitive polynomial for GF(2^12), x^12 + x^9 + x^3 + x^2 + 1
 typedef GF2M<uint,mo,prim_poly_o> GFO;
-GFO fao = GFO(120,0); // 9 = 64 + 2 = 1010 = x + x^3 // Element of order ?
+GFO fao = GFO(10,0); // 9 = 64 + 2 = 1010 = x + x^3 // Element of order 4095; must have order 4095
+//cout << "element has order:" << fao.order() << endl; // check for order of element
 */
 
 
