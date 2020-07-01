@@ -230,17 +230,26 @@ if (vm.count("decode")) {
 
 	vector<string> drawnseg;
 
-	
 	if(infile != ""){
 		cout << "assume text file as input format" << endl;
 
 		string sLine = "";
 		ifstream in;
 		in.open(infile.c_str());
+		if (in.fail()) {
+        	cerr << "Error when opening infile - does infile exist?" << endl;
+			return 1;
+		}	
+
+
+		unsigned ctr = 0;	
 		while (!in.eof()){
 			getline(in, sLine);
 			drawnseg.push_back(sLine);
+			ctr++;
+			cout << "\rRead " << ctr << " lines                 ";
 		}
+		cout << endl;
 		drawnseg.resize(drawnseg.size()-1); // erase the last, empty line
 	} else {
 		cout << "assume fastq file as input format" << endl;
@@ -248,9 +257,11 @@ if (vm.count("decode")) {
 		int seq_length = N*mi/2;
 		ifstream in;
 		in.open(fastq_infile.c_str());
-		if(in.fail())
-        	cerr << "Error when opening infile" << endl;
-		
+		if(in.fail()){
+        	cerr << "Error when opening infile - does infile exist?" << endl;
+			return 1;
+		}
+
 		string sLine = "";
 		vector<int> hist(400,0);
 		unsigned totalctr = 0;
@@ -298,8 +309,10 @@ if (vm.count("disturb")) {
 
 	// take M random draws uniformly at random and disturb those
 
-	const unsigned M = n*numblocks*20;
-	const float substprob = 0.0001; // substitution error probability
+	const unsigned M = n*numblocks*6;
+	const float substprob = 0.0005; // substitution error probability
+	//const unsigned M = n*numblocks*20;
+	//const float substprob = 0.0005; // substitution error probability
 	cout << "disturb:" << endl;
 	cout << "\tDraw " << M << " many times" << endl;
 	cout << "\tsubstitution error probability " << substprob << endl;

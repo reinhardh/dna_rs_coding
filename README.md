@@ -135,10 +135,12 @@ Running the code in a Docker container - recommendened for Windows and Mac Users
 
 	`docker run -it -v c:/Users:/data ubuntu:16.04 bash`
 
+This generates a docker container which has access to the folder ~/Documents/data on your local machine. Make sure the docker container has sufficient memory when decoding larger files - for the example here little memory is needed.
+
 3. Install the required software in the Docker container:
 
         apt-get update
-        apt-get install gcc
+        apt-get install g++
         apt-get install make
         apt-get install git
         apt-get install libboost-all-dev
