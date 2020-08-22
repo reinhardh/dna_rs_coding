@@ -1,7 +1,41 @@
 Summary
 =======
 
-This file gives instructions on encoding and decoding information on short DNA molecules.
+This file gives instructions for encoding and decoding information on short DNA molecules.
+
+Instructions to encode the first Biohackers series from DNA
+===========================================================
+
+In August 2020, the first episode of the new Netflix series Biohackers was stored on DNA, see [https://de.biohackersnetflix.com/](https://de.biohackersnetflix.com/) for details. With the code in this repository, you can reconstruct the first episode yourself from DNA. Here are three steps for reconstruction:
+
+1. Download the DNA from [https://de.biohackersnetflix.com/](http://d3u0hl24lyh7px.cloudfront.net/encoded_withprimers.txt), and make sure it is in your Downloads folder.
+
+2. Install the code in this repository: There are a few options for installing the code, explained below, and here is a single simple suggestion that works for most operating systems:
+	
+	i.  Install Docker, by downloading [Docker Desktop](https://docs.docker.com/get-docker/).
+	
+	ii. Download a virtual machine containing the pre-installed code from this repository, by typing the following command in the Terminal application at a Mac or the bash application at linux operating system:
+	
+	`docker pull rheckel/dna_storage'
+	
+	iii. Start the virtual machine:
+	
+	`docker run -it -v ~/Downloads:/data rheckel/dna_storage bash'
+	
+	You are now runing a virtual machine in which the code from this repository is already installed.
+
+3. In the following you'll decode the series from the DNA. For this you need to type the following commands in the Terminal application at a Mac or the bash application at linux operating system:
+	
+	i. Change to the folder in which the code is located:
+	
+	`cd dna_rs_coding/simulate/'
+
+	ii. Type the following to start the decoding:
+	
+	`./texttodna --decode --n=16383 --k=12700 --N=35 --K=32 --nuss=12 --numblocks=237 --input=/data/netflix_encoded_shuffled.txt --output=../data/netflix_BH101_FullEP_rec.mp4'
+	
+	You can now see the code running and the video is being reconstructed. Once the code is done running, the file ``netflix_BH101_FullEP_rec.mp4’' appears in the folder ``Downloads’’, and you successfully reconstructed the video.
+
 
 Description of the scheme
 =========================
