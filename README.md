@@ -24,7 +24,7 @@ In August 2020, the first episode of the new Netflix series Biohackers was store
 	
 	You are now runing a virtual machine in which the code from this repository is already installed.
 
-3. In the following you'll decode the series from the DNA. For this you need to type the following commands in the Terminal application at a Mac or the bash application at linux operating system:
+3. In the following you'll decode the series from the DNA. For this you need to type the following commands (in the bash that you just started when typing `docker run ... `):
 	
 	i. Change to the folder in which the code is located:
 	
@@ -32,7 +32,7 @@ In August 2020, the first episode of the new Netflix series Biohackers was store
 
 	ii. Type the following to start the decoding:
 	
-	`./texttodna --decode --n=16383 --k=12700 --N=35 --K=32 --nuss=12 --numblocks=237 --input=/data/netflix_encoded_shuffled.txt --output=../data/netflix_BH101_FullEP_rec.mp4`
+	`./texttodna --decode --n=16383 --k=12700 --N=35 --K=32 --nuss=12 --numblocks=237 --input=/data/netflix_encoded.txt --output=../data/netflix_BH101_FullEP_rec.mp4`
 	
 	You can now see the code running and the video is being reconstructed. Once the code is done running, the file `netflix_BH101_FullEP_rec.mp4` appears in the folder `Downloads`, and you successfully reconstructed the video.
 
