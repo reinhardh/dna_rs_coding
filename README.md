@@ -8,13 +8,13 @@ Instructions to encode the first Biohackers episode from DNA
 
 In August 2020, the first episode of the new Netflix series *Biohackers* was stored on DNA, see [https://de.biohackersnetflix.com/](https://de.biohackersnetflix.com/) for details. With the code in this repository, you can reconstruct the first episode yourself from DNA. Here are three steps for reconstruction:
 
-1. Download the textfile containing the DNA sequences from [https://de.biohackersnetflix.com/](http://d3u0hl24lyh7px.cloudfront.net/encoded_withprimers.txt). Make sure the file is in your `Downloads` folder. The file `netflix_encoded.txt` contains about four million sequences of DNA, each has length 105 nucleotides plus 20 nucleotides as primers at the begining and end of each sequence. As an example, the first five sequences in the file are:
+1. Download the textfile containing the DNA sequences from [https://de.biohackersnetflix.com/](http://d3u0hl24lyh7px.cloudfront.net/encoded_withprimers.txt). Make sure the file is in your `Downloads` folder. The file `encoded_withprimers.txt` contains about four million sequences of DNA, each has length 105 nucleotides plus 20 nucleotides as primers at the begining and end of each sequence. As an example, the first five sequences in the file are:
 
-`CTCCCAGGGACAAAGGTTCTGCATTTGCAGCAAGACTCCTGTAGTGCTGCAGATTCTCTGGTTGGATAGTACGGCGTACATTTCTGTATTGTAGCACCATGGGGT
-TAAGGCTTCGTAACAGATATTCTATATCGTCACATTGGTCTGAAGGAAGTCGCCTATAATCGCTCCTCTGTTTTTTAAAACTGCTATGGACCCGCTGTTCGGTGG
-CATGGTATAAGTGTTAAGGGTAATAACCACCTACCCCCCTCATTGCTCGTTTTTCCTGGAACCTTAACATTCGCAATAGCTAGCTGTTTCCTAGTAGAACCAAGG
-AGGATGTAGTCACAGGTCATTGTCATTAACTCAACCGAGGACATAACACTAAGTCCCACTAGGCCTGGATTCTCTAACGCGGTCTCTCTATTGGGGGAAGGGGTG
-TCTGGTAAGGCGGGTTGATATCAGTCACCTCCCTTTGAGCTAAAATACGATGGCGATTTAGTGTGAAACTAATAATGCTTGTCATACCAGCAGTACCGGATCGGG`
+`ACACGACGCTCTTCCGATCTGACTCTGTCTTGTCGACATCACGTCGTATCCGACATAGACCTTCATATGGAAGCTAACTAATGGGTGCTTAACTGGGCTTAGCTTTTGTGTGATTAGGTCCTGCTAGATCGGAAGAGCACACGTCT
+ACACGACGCTCTTCCGATCTCTCCCAGGGACAAAGGTTCTGCATTTGCAGCAAGACTCCTGTAGTGCTGCAGATTCTCTGGTTGGATAGTACGGCGTACATTTCTGTATTGTAGCACCATGGGGTAGATCGGAAGAGCACACGTCT
+ACACGACGCTCTTCCGATCTTAAGGCTTCGTAACAGATATTCTATATCGTCACATTGGTCTGAAGGAAGTCGCCTATAATCGCTCCTCTGTTTTTTAAAACTGCTATGGACCCGCTGTTCGGTGGAGATCGGAAGAGCACACGTCT
+ACACGACGCTCTTCCGATCTCATGGTATAAGTGTTAAGGGTAATAACCACCTACCCCCCTCATTGCTCGTTTTTCCTGGAACCTTAACATTCGCAATAGCTAGCTGTTTCCTAGTAGAACCAAGGAGATCGGAAGAGCACACGTCT
+ACACGACGCTCTTCCGATCTAGGATGTAGTCACAGGTCATTGTCATTAACTCAACCGAGGACATAACACTAAGTCCCACTAGGCCTGGATTCTCTAACGCGGTCTCTCTATTGGGGGAAGGGGTGAGATCGGAAGAGCACACGTCT`
 
 
 2. Install the code provided in this repository: There are a few options for installing the code that are explained below. Here is a single, simple suggestion that works for most operating systems:
