@@ -21,6 +21,8 @@ ACACGACGCTCTTCCGATCTAGGATGTAGTCACAGGTCATTGTCATTAACTCAACCGAGGACATAACACTAAGTCCCACT
 	
 	*i.*  Install Docker, by downloading [Docker Desktop](https://docs.docker.com/get-docker/).
 	
+	Make sure that at least 6GB of memory and 2GB of Swap are available, in the resource tab at [https://docs.docker.com/docker-for-mac/](https://docs.docker.com/docker-for-mac/) (recommended are 8GB of memory and 4GB of swap).  
+	
 	*ii.* Download a virtual machine containing the pre-installed code from this repository, by typing the following command in the Terminal or bash application on a computer with a  Mac or Linux operating system, respectively:
 	
 	`docker pull rheckel/dna_storage`
@@ -42,6 +44,8 @@ ACACGACGCTCTTCCGATCTAGGATGTAGTCACAGGTCATTGTCATTAACTCAACCGAGGACATAACACTAAGTCCCACT
 	`./texttodna --decode --n=16383 --k=12700 --N=35 --K=32 --nuss=12 --numblocks=237 --primer_length=20 --input=/data/encoded_withprimers.txt --output=../data/netflix_BH101_FullEP_rec.mp4`
 	
 	You can now see the code running and the episode is being reconstructed. Once the code is done running, the file `netflix_BH101_FullEP_rec.mp4` appears in the folder `Downloads`, and you successfully reconstructed the video.
+	
+	If you get the error message `Killed`, most likely you did not give your process enough memory or swap, or your computer does not have enough (6GB of memory and 2GB of swap are necessary). 
 
 
 Description of the scheme
