@@ -3,38 +3,45 @@ Summary
 
 This file gives instructions for encoding and decoding information on short DNA molecules.
 
-Instructions to encode the first Biohackers series from DNA
+Instructions to encode the first Biohackers episode from DNA
 ===========================================================
 
-In August 2020, the first episode of the new Netflix series Biohackers was stored on DNA, see [https://de.biohackersnetflix.com/](https://de.biohackersnetflix.com/) for details. With the code in this repository, you can reconstruct the first episode yourself from DNA. Here are three steps for reconstruction:
+In August 2020, the first episode of the new Netflix series *Biohackers* was stored on DNA, see [https://de.biohackersnetflix.com/](https://de.biohackersnetflix.com/) for details. With the code in this repository, you can reconstruct the first episode yourself from DNA. Here are three steps for reconstruction:
 
-1. Download the DNA from [https://de.biohackersnetflix.com/](http://d3u0hl24lyh7px.cloudfront.net/encoded_withprimers.txt), and make sure it is in your `Downloads` folder.
+1. Download the textfile containing the DNA sequences from [https://de.biohackersnetflix.com/](http://d3u0hl24lyh7px.cloudfront.net/encoded_withprimers.txt). Make sure the file is in your `Downloads` folder. The file `netflix_encoded.txt` contains about four million sequences of DNA, each has length 105 nucleotides. As an example, the first five sequences in the file are:
 
-2. Install the code in this repository: There are a few options for installing the code, explained below. Here is a single, simple suggestion that works for most operating systems:
+`CTCCCAGGGACAAAGGTTCTGCATTTGCAGCAAGACTCCTGTAGTGCTGCAGATTCTCTGGTTGGATAGTACGGCGTACATTTCTGTATTGTAGCACCATGGGGT
+TAAGGCTTCGTAACAGATATTCTATATCGTCACATTGGTCTGAAGGAAGTCGCCTATAATCGCTCCTCTGTTTTTTAAAACTGCTATGGACCCGCTGTTCGGTGG
+CATGGTATAAGTGTTAAGGGTAATAACCACCTACCCCCCTCATTGCTCGTTTTTCCTGGAACCTTAACATTCGCAATAGCTAGCTGTTTCCTAGTAGAACCAAGG
+AGGATGTAGTCACAGGTCATTGTCATTAACTCAACCGAGGACATAACACTAAGTCCCACTAGGCCTGGATTCTCTAACGCGGTCTCTCTATTGGGGGAAGGGGTG
+TCTGGTAAGGCGGGTTGATATCAGTCACCTCCCTTTGAGCTAAAATACGATGGCGATTTAGTGTGAAACTAATAATGCTTGTCATACCAGCAGTACCGGATCGGG'
+
+
+2. Install the code provided in this repository: There are a few options for installing the code that are explained below. Here is a single, simple suggestion that works for most operating systems:
 	
-	i.  Install Docker, by downloading [Docker Desktop](https://docs.docker.com/get-docker/).
+	*i.*  Install Docker, by downloading [Docker Desktop](https://docs.docker.com/get-docker/).
 	
-	ii. Download a virtual machine containing the pre-installed code from this repository, by typing the following command in the Terminal or bash application on a computer with a  Mac or linux operating system, respectively:
+	*ii.* Download a virtual machine containing the pre-installed code from this repository, by typing the following command in the Terminal or bash application on a computer with a  Mac or Linux operating system, respectively:
 	
 	`docker pull rheckel/dna_storage`
 	
-	iii. Start the virtual machine:
+	*iii.* Start the virtual machine:
 	
 	`docker run -it -v ~/Downloads:/data rheckel/dna_storage bash`
 	
-	You are now runing a virtual machine in which the code from this repository is already installed.
+	You are now running a virtual machine in which the code from this repository is already installed.
 
-3. In the following you'll decode the series from the DNA. For this you need to type the following commands (in the bash that you just started when typing `docker run ... `):
+3. In the following you will decode the first episode from the DNA sequences. For this you need to type the following commands (in the bash that you just started when typing `docker run ... `):
 	
-	i. Change to the folder in which the code is located:
+	*i.* Change to the folder in which the code is located by typing:
 	
 	`cd dna_rs_coding/simulate/`
 
-	ii. Type the following to start the decoding:
+	*ii.* Type the following command to start the decoding process:
 	
 	`./texttodna --decode --n=16383 --k=12700 --N=35 --K=32 --nuss=12 --numblocks=237 --input=/data/netflix_encoded.txt --output=../data/netflix_BH101_FullEP_rec.mp4`
 	
-	You can now see the code running and the video is being reconstructed. Once the code is done running, the file `netflix_BH101_FullEP_rec.mp4` appears in the folder `Downloads`, and you successfully reconstructed the video.
+	You can now see the code running and the episode is being reconstructed. Once the code is done running, the file `netflix_BH101_FullEP_rec.mp4` appears in the folder `Downloads`, and you successfully reconstructed the video.
 
 
 Description of the scheme
