@@ -165,8 +165,8 @@ if ( l*mi < log( numblocks*n )/log( 2 ) ) {
 // tell the user the parameter choices
 
 cout << "--------------------------------" << endl;
-cout << "redundancy outer code: " << float(n-k)/float(k) << " (= (n-k)/k)" << endl;
-cout << "redundancy inner code: " << float(N-K)/float(K) << " (= (N-K)/K)" << endl;
+cout << "redundancy outer code: " << float(n-k)/float(k)*100 << "\%" << endl; // " (= (n-k)/k)" << endl;
+cout << "redundancy inner code: " << float(N-K)/float(K)*100 << "\%" << endl; // " (= (N-K)/K)" << endl;
 cout << "--------------------------------" << endl;
 
 
@@ -245,12 +245,17 @@ if (vm.count("decode")) {
 		unsigned ctr = 0;	
 		while (!in.eof()){
 			getline(in, sLine);
-			drawnseg.push_back(sLine);
-			ctr++;
-			cout << "\rRead " << ctr << " lines                 ";
+			
+			int seq_length = N*mi/2;
+			if(sLine.size() >= seq_length + primer_length){
+				sLine = sLine.substr(primer_length, seq_length);
+				drawnseg.push_back(sLine);
+				ctr++;
+			}
+			cout << "\rLines read: " << ctr;
 		}
 		cout << endl;
-		drawnseg.resize(drawnseg.size()-1); // erase the last, empty line
+		//drawnseg.resize(drawnseg.size()-1); // erase the last, empty line
 	} else {
 		cout << "assume fastq file as input format" << endl;
 
