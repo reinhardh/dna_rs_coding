@@ -520,3 +520,121 @@ void EnDecode<Innercode,Outercode>::outercode_stats(const vector< vector<typenam
 	cout << "OC: symbol error   prob.: " << total_error_ctr  << endl;
 	cout << "OC: symbol erasure prob.: " << total_erasure_ctr << endl;
 }
+
+
+
+
+
+
+
+///////////////////////////// Class that only generates one sequence
+
+template<class Innercode>
+class EnDecodeSingleSeq {
+	//private:
+	public:
+	Innercode innercode;
+	typedef typename Innercode::Symbol GFI;
+	DNAmapGF<GFI> dnamap;
+	vector< vector<GFI> > groundtruth;
+
+	EnDecodeSingleSeq(){};
+	EnDecodeSingleSeq(const Innercode& innercode_){
+		innercode = innercode_;
+	};
+
+	void encode(string& str, vector<string>& urn);
+	void decode(string& str, const vector<string>& drawnseg);
+};
+
+
+//////////////////////////// Only an inner code to encode a single sequence 
+
+template<class Innercode>
+void EnDecodeSingleSeq<Innercode>::encode(string& str, vector<string>& urn){
+		
+	typedef GF2M<uint,8,0> GFSTR;
+
+	// convert the given string to symbols in the inner code
+	vector<GFSTR> strnu; // data string in numbers, each one byte
+	for(unsigned char c: str){
+		unsigned nu = (unsigned) c;
+		assert(nu < 256);
+		strnu.push_back(GFSTR( nu , 0));
+	}
+
+	vector<GFI> infveci;
+	GFM2GFN<GFSTR,GFI>(strnu,infveci); // convert data string to innercode symbols
+
+	// checks
+	cout << "Filesize in Byte: " << str.size() << endl;
+	assert( GFI::m * innercode.k >= 8 * str.size() ); // make sure the data has the right length
+	assert(infveci.size() == innercode.k);
+
+	// add pseudorandom sequence to data
+	mt19937 rng( 5489U ) ; // constructed with seed 5489U
+	uniform_int_distribution<uint> randgfe(0, 1<<GFI::m - 1 );
+	for(GFI& gfi: infveci)
+		//gfi += GFI(randgfe(rng),0); // different behavior at diff system
+		gfi += GFI( rng() % (1<<GFI::m) ,0);
+	
+	// encode the inner code, write it to urn[0] 
+    vector<GFI> icw;
+	innercode.RS_shortened_encode(infveci,icw);
+	dnamap.cw2frag(icw,urn[0]);
+	flipvecdir(urn[0]);
+	
+}
+
+//////////////////////////////////////////////////////////////////////
+
+////////////////////////////
+template<class Innercode>
+void EnDecodeSingleSeq<Innercode>::decode(string& str, const vector<string>& drawnseg){
+	/*
+	Inner decoding, only the first read
+	*/
+
+	typedef typename Innercode::Symbol GFI;
+
+	string read = drawnseg[0];
+
+	vector<GFI> rececw;		// read: inner codeword
+	string flipedread = read;
+	flipvecdir(flipedread);
+	dnamap.frag2cw(rececw,flipedread); 	// map read to GFI vector
+		
+	// decode molecule
+	pair<unsigned,unsigned> erctric; // for error counts
+	vector<GFI> irec(innercode.k); // recovered information from inner codeword
+	erctric = innercode.RS_shortened_decode(irec,rececw);
+
+	cout << "code: " << (float)erctric.first << " erasures corrected" << endl;
+	cout << "code: " << (float)erctric.second << " substitutions corrected" << endl;
+
+
+
+	// remove pseudorandom sequence 
+	mt19937 rng( 5489U ) ; // constructed with seed 5489U
+	uniform_int_distribution<uint> randgfe(0, 1<<GFI::m - 1 );
+	for(GFI& gfi: irec)
+		//gfi -= GFI( randgfe(rng) ,0); // different behavior at diff system
+		gfi -= GFI( rng() % (1<<GFI::m)  ,0);
+
+
+	// convert the string to symbols in the outer code
+	typedef GF2M<uint,8,0> GFSTR;
+	vector<GFSTR> strnu; // string in numbers
+	GFM2GFN<GFI,GFSTR>(irec,strnu);
+	
+	str.resize(0);
+	for(GFSTR ch : strnu)
+		str += (char)ch.el;
+
+}
+
+
+
+
+
+

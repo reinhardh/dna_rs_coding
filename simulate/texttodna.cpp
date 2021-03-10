@@ -46,13 +46,15 @@ unsigned k = 10977; // k = 0.67*n
 unsigned l = 4; // length of the index
 unsigned nuss = 12; // number of symbols of outer code per segment
 
-
 int opt;
+
 po::options_description desc("Allowed options");
 desc.add_options()
     ("help", "produce help message")
     ("encode", "encode")
     ("decode", "decode")
+	("singleseq","singleseq")
+
     ("disturb", "draw uniformly at random from the input lines, add errors to each line")
 	("input",po::value<string>(&infile)->default_value(""),"inputfile")	
 	("fastq_infile",po::value<string>(&fastq_infile)->default_value(""),"fastq inputfile")	
@@ -130,9 +132,12 @@ Outercode outercode(n,k,fao,dftgfo,n_u);
 
 
 // check all the parameter choices
+
+if (!vm.count("singleseq")) {
 if (K*mi != nuss*mo+l*mi) {
 	cerr << "Must have: K*mi = nuss*mo + l*mi, where mi=6, mo=14, but got " << K*mi << ", " << nuss*mo+l*mi << endl;	
 	return 1;
+}
 }
 
 if ( K > N) {
@@ -156,7 +161,7 @@ if ( N > N_u) {
 }
 
 if ( l*mi < log( numblocks*n )/log( 2 ) ) {
-	cerr << "Index has lenght " << l*mi << " bit, but require " << log( numblocks*n )/log( 2 ) << " bits" << endl;	
+	cerr << "Index has length " << l*mi << " bit, but require " << log( numblocks*n )/log( 2 ) << " bits" << endl;	
 	return 1;
 }
 
@@ -173,7 +178,7 @@ cout << "--------------------------------" << endl;
 
 // encoder/decoder 
 EnDecode< Innercode , Outercode > endecode(innercode,outercode,l,nuss);
-
+EnDecodeSingleSeq< Innercode > endecodesingleseq(innercode);
 
 /////////////////////// encode 
 if (vm.count("encode")) {
@@ -192,19 +197,28 @@ if (vm.count("encode")) {
 
 	// encode - determines the number of blocks required automatically
 	vector<string> urn(n*numblocks);
-	endecode.encode(str, urn);
-	numblocks = endecode.numblocks; 
 	
+	if( vm.count("singleseq") ){
+		// store only a signle sequence
+		endecodesingleseq.encode(str, urn);
+		numblocks = 1;
+	} else {
+		endecode.encode(str, urn);
+		numblocks = endecode.numblocks; 
+	}
 
 	if(numblocks*k*mo*nuss < str.size()*8){
 		cerr << "trying to store " << str.size()*8 << " bits, but can only store " << numblocks*k*mo*nuss << "many" << endl;	
 		return 1;
 	}
 
+	if( vm.count("singleseq") ){
+		cout << "encoded " << str.size() << " Bytes to one DNA segment of length " << urn[0].size() << endl;
+	} else {
+		cout << "encoded " << str.size() << " Bytes to " << numblocks << " blocks, resulting in "
+	<< urn.size() << " DNA segments of length " << urn[0].size() << " each." << endl;
+    }
 
-	cout << "encoded " << str.size() << " Bytes to " << numblocks << " blocks, resulting in "
-	<< n*numblocks << " DNA segments of length " << N << " each." << endl;
-   
 	ofstream out;
 	out.open(outfile.c_str());
 	for(unsigned i=0;i<urn.size();++i) out << urn[i] << endl;
@@ -215,11 +229,23 @@ if (vm.count("encode")) {
 
 /////////////////////// decode 
 if (vm.count("decode")) {
-	
-	if( (infile == "" && fastq_infile == "") || outfile =="" || numblocks==0 ) {
-		cout << "in/outfile/numblocks not specified " << endl; 
+
+	if( (infile == "" && fastq_infile == "") ) {	
+		cout << "infile not specified " << endl; 
 		return 0;
 	}
+	
+	if( outfile ==""){
+		cout << "outfile not specified " << endl; 
+		return 0;
+	}
+	
+	if( numblocks==0 && !vm.count("singleseq") ) {
+		cout << "numblocks not specified " << endl; 
+		return 0;
+	}
+	
+	
 	if(fastq_infile != ""){
 		cout << "fastq infile:  " << fastq_infile << endl;
 	} else {
@@ -299,8 +325,15 @@ if (vm.count("decode")) {
 
 	string recstr;
 	cout << "start decode.." << endl;	
-	endecode.numblocks = numblocks;
-	endecode.decode(recstr, drawnseg, gtruthfile);
+	
+	if( vm.count("singleseq")){
+		// store only a signle sequence
+		endecodesingleseq.decode(recstr, drawnseg);
+	} else {
+		endecode.numblocks = numblocks;
+		endecode.decode(recstr, drawnseg, gtruthfile);
+	}
+	
 	
 	ofstream out;
 	out.open(outfile.c_str());

@@ -156,6 +156,18 @@ The input can be a fastq file. In that case provide a fastq file as input as fol
 
 Use the flag --reverse if the reads are in reverse complement form.
 
+Example 4
+---------
+
+This is an unusual use case, but it is possible to only use the inner code and store a tiny amount of data on a single sequence. For example, the following takes a file consisting of 21 byte and encodes it onto a single sequences. Note that for this we need num_bytes*8 = K*mi, which is satisfied for our example with 21*8=28*6.
+
+1. Encoding: 
+	`./texttodna --singleseq --K=28 --N=34 --encode --input=../data/original_data.txt --output=../data/data_encoded.txt`
+2. Decoding:
+	`./texttodna --singleseq --K=28 --N=34 --decode --input=../data/data_encoded.txt --output=../data/data_rec.txt`
+
+
+
 Installation
 ============
 
